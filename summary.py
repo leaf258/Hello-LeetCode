@@ -112,6 +112,9 @@ def backtrack(nums:list, target:int, total:int, res:list, state:list) -> list:
         state.pop()
         total -= nums[i]
 
+# 分支合并测试
+
+
 
 
 
