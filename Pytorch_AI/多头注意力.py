@@ -79,9 +79,27 @@ class Encoder(nn.Module):
     def __init__(self, layer:TransformerLayer, n_layers:int):
         super().__init__()
         self.layers = clone_module_list(layer, n_layers)
+        self.norm = nn.LayerNorm([layer.size])  # 添加最终的层归一化
+
+    def forward(self, x:torch.Tensor, mask:torch.Tensor=None):
+        """
+        前向传播
+        :param x: 输入张量，形状为 [seq_len, batch_size, d_model]
+        :param mask: 注意力掩码，形状为 [seq_len, seq_len, batch_size]
+        :return: 编码器输出，形状为 [seq_len, batch_size, d_model]
+        """
+        # 依次通过每个 Transformer 层
+        for layer in self.layers:
+            x = layer(x=x, mask=mask)
+        
+        # 最终的层归一化
+        return self.norm(x)
 
 ## Transformer 解码器
-
+class Decoder(nn.Module):
+    def __init__(self, layer:TransformerLayer, n_layers:int):
+        super().__init__()
+        self.layers = clone_module_list(layer, n_layers)
 
 ## 生成器
 

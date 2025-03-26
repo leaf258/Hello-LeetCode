@@ -94,8 +94,28 @@ def quick_sort(nums, left, right):
     quick_sort(nums, pivot+1, right)
 
 
-
 ## 回溯
+def backtrack(nums:list, target:int, total:int, res:list, state:list) -> list:
+    if total == target:
+        res.append(list(state))
+        return
+    duplicated = set()
+    for i in range(len(nums)):
+        if total + nums[i] > target:
+            break
+        if nums[i] in duplicated:
+            continue
+        duplicated.add(nums[i])
+        state.append(nums[i])
+        total += nums[i]
+        backtrack(nums, target, total, res, state)
+        state.pop()
+        total -= nums[i]
+
+
+
+
+
 
 
 
@@ -103,6 +123,15 @@ def quick_sort(nums, left, right):
 if __name__ == "__main__":
     # nums = [1,1,1,2,3,3]
     # print(Toptwo(nums))
-    nums = [1,3,2,4,1]
-    quick_sort(nums, 0, 4)
-    print(nums)
+    # nums = [1,3,2,4,1]
+    # quick_sort(nums, 0, 4)
+    # print(nums)
+    nums = [4,4,5]
+    nums.sort() # 排序后，可在backtrack中break以减少操作
+    target = 9
+    total = 0
+    res = []
+    state = []
+    start = 0
+    backtrack(nums, target, total, res, state)
+    print(res)
